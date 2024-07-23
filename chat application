@@ -1,0 +1,276 @@
+Index.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8" />
+ <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+ <title>Chat App</title>
+ <link
+href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=
+swap" rel="stylesheet">
+ <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+ <div class="chat-app-container">
+ <div class="chat-window thiya-chat active-chat">
+ <div class="chat-header">
+ <h2>Thiya's chat</h2>
+ </div>
+ <div class="chat-messages"></div>
+ <form class="chat-input-form">
+ <input type="text" class="chat-input" required placeholder="Type here,
+Thiya..." />
+ <button type="submit" class="button send-button">Send</button>
+ </form>
+ <button class="button clear-chat-button">Clear Chat</button>
+ </div>
+ <div class="chat-window suganesh-chat">
+ <div class="chat-header">
+ <h2>Suganesh's chat</h2>
+ </div>
+ <div class="chat-messages"></div>
+ <form class="chat-input-form">
+ <input type="text" class="chat-input" required placeholder="Type here,
+Suganesh..." />
+ <button type="submit" class="button send-button">Send</button>
+ </form>
+ <button class="button clear-chat-button">Clear Chat</button>
+ </div>
+ </div>
+ <div class="person-selector">
+ <button class="button person-selector-button active-person" id="thiyaselector">Thiya</button>
+ <button class="button person-selector-button" id="suganeshselector">Suganesh</button>
+ </div>
+ <script src="app.js"></script>
+</body>
+</html>
+Style.css
+body {
+ background-image: url('http://yesofcorsa.com/wpcontent/uploads/2016/11/4K-Wallpapers-7.jpg');
+ background-size: cover;
+background-position: center;
+ color: #fff;
+ font-family: 'Roboto', sans-serif;
+ height: 100vh;
+ display: flex;
+ flex-direction: column;
+ justify-content: center;
+ align-items: center;
+ margin: 0;
+}
+.button {
+ border: none;
+ padding: 0.625em 1em;
+ border-radius: 0.5em;
+ cursor: pointer;
+ transition: background 0.3s, transform 0.2s;
+}
+.button:hover {
+ filter: brightness(1.1);
+}
+.button:active {
+ transform: translateY(2px);
+}
+.person-selector {
+ display: flex;
+ justify-content: center;
+ gap: 1em;
+ margin: 1em 0;
+}
+.person-selector-button {
+ width: 100%;
+ background-color: #444;
+ color: #fff;
+ font-size: 1.1em;
+}
+.active-person {
+ background: #007bff;
+ box-shadow: 0 0 0.5em 0.1em rgba(0, 123, 255, 0.5);
+}
+.chat-app-container {
+ display: flex;
+ gap: 1em;
+ margin-bottom: 1em;
+ width: 90%;
+ max-width: 800px;
+}
+.chat-window {
+ background: #333;
+ border-radius: 0.5em;
+ padding: 1em;
+ width: 100%;
+ max-width: 600px;
+ height: 500px;
+ box-shadow: 0 0 1.25em 0.5em rgba(0, 0, 0, 0.5);
+ display: none;
+ flex-direction: column;
+ background-size: cover;
+ background-position: center;
+}
+.thiya-chat {
+ background-image: url('https://cdn.wallpapersafari.com/98/39/9My6KE.jpg');
+}
+.suganesh-chat {
+ background-image: url('https://wallpaperaccess.com/full/1288099.jpg');
+}
+.active-chat {
+ display: flex;
+}
+.chat-header {
+ margin-bottom: 1em;
+ text-align: center;
+}
+.chat-header h2 {
+ font-size: 1.5em;
+ font-weight: bold;
+ margin: 0;
+}
+.chat-messages {
+ height: 400px;
+ overflow-y: scroll;
+ padding-right: 1em;
+ background: rgba(0, 0, 0, 0.5);
+ border-radius: 0.5em;
+}
+.chat-messages::-webkit-scrollbar {
+ width: 8px;
+}
+.chat-messages::-webkit-scrollbar-thumb {
+ background-color: #007bff;
+ border-radius: 4px;
+}
+.message {
+ padding: 0.75em;
+ border-radius: 1em;
+ margin-bottom: 1em;
+ display: flex;
+ flex-direction: column;
+ color: #fff;
+}
+.message-sender {
+ font-weight: bold;
+ margin-bottom: 0.5em;
+}
+.message-text {
+ font-size: 1em;
+ margin-bottom: 0.5em;
+ word-wrap: break-word;
+}
+.message-timestamp {
+ font-size: 0.75em;
+ text-align: right;
+}
+.blue-bg {
+ background-color: #4CAF50;
+}
+.gray-bg {
+ background-color: #03A9F4;
+}
+.chat-input-form {
+ display: flex;
+ align-items: center;
+ gap: 0.625em;
+ margin-top: 1em;
+}
+.chat-input {
+ padding: 0.625em;
+ border: none;
+ border-radius: 0.5em;
+ background-color: #1f1f1f;
+ color: #ffffff;
+ font-size: 1em;
+ flex-grow: 1;
+}
+.chat-input::placeholder {
+ color: #ccc;
+}
+.send-button {
+ background-color: #007bff;
+ color: #fff;
+ font-size: 1em;
+ font-weight: bold;
+}
+.clear-chat-button {
+ display: block;
+ margin: 1em auto 0;
+ background-color: #dc3545;
+ color: #fff;
+}
+App.js
+const thiyaSelectorBtn = document.querySelector('#thiya-selector');
+const suganeshSelectorBtn = document.querySelector('#suganesh-selector');
+const chatHeaders = document.querySelectorAll('.chat-header h2');
+const chatContainers = document.querySelectorAll('.chat-window');
+const chatMessages = document.querySelectorAll('.chat-messages');
+const chatInputForms = document.querySelectorAll('.chat-input-form');
+const chatInputs = document.querySelectorAll('.chat-input');
+const clearChatBtns = document.querySelectorAll('.clear-chat-button');
+const messages = JSON.parse(localStorage.getItem('messages')) || [];
+const createChatMessageElement = (message) => `
+ <div class="message ${message.sender === 'Thiya' ? 'blue-bg' : 'gray-bg'}">
+ <div class="message-sender">${message.sender}</div>
+ <div class="message-text">${message.text}</div>
+ <div class="message-timestamp">${message.timestamp}</div>
+ </div>
+`;
+window.onload = () => {
+ messages.forEach((message) => {
+ chatMessages.forEach((chatMessage) => {
+ chatMessage.innerHTML += createChatMessageElement(message);
+ });
+ });
+};
+let messageSender = 'Thiya';
+const updateMessageSender = (name) => {
+ messageSender = name;
+ chatHeaders.forEach((chatHeader) => {
+ chatHeader.innerText = `${messageSender}'s chatting...`;
+ });
+ chatInputs.forEach((chatInput) => {
+ chatInput.placeholder = `Type here, ${messageSender}...`;
+ });
+ if (name === 'Thiya') {
+ thiyaSelectorBtn.classList.add('active-person');
+ suganeshSelectorBtn.classList.remove('active-person');
+ document.querySelector('.thiya-chat').classList.add('active-chat');
+ document.querySelector('.suganesh-chat').classList.remove('active-chat');
+ } else {
+ suganeshSelectorBtn.classList.add('active-person');
+ thiyaSelectorBtn.classList.remove('active-person');
+ document.querySelector('.suganesh-chat').classList.add('active-chat');
+ document.querySelector('.thiya-chat').classList.remove('active-chat');
+ }
+ chatInputs[messageSender === 'Thiya' ? 0 : 1].focus();
+};
+thiyaSelectorBtn.onclick = () => updateMessageSender('Thiya');
+suganeshSelectorBtn.onclick = () => updateMessageSender('Suganesh');
+const sendMessage = (e) => {
+ e.preventDefault();
+ const timestamp = new Date().toLocaleString('en-US', { hour: 'numeric',
+minute: 'numeric', hour12: true });
+ const message = {
+ sender: messageSender,
+ text: chatInputs[messageSender === 'Thiya' ? 0 : 1].value,
+ timestamp,
+ };
+ messages.push(message);
+ localStorage.setItem('messages', JSON.stringify(messages));
+ chatMessages.forEach((chatMessage) => {
+ chatMessage.innerHTML += createChatMessageElement(message);
+ });
+ chatInputForms[messageSender === 'Thiya' ? 0 : 1].reset();
+ chatMessages.forEach((chatMessage) => {
+ chatMessage.scrollTop = chatMessage.scrollHeight;
+ });
+};
+chatInputForms.forEach((chatInputForm) => {
+ chatInputForm.addEventListener('submit', sendMessage);
+});
+clearChatBtns.forEach((clearChatBtn, index) => {
+ clearChatBtn.addEventListener('click', () => {
+ localStorage.clear();
+ chatMessages.forEach((chatMessage) => {
+ chatMessage.innerHTML = '';
+ });
+ });
+});
